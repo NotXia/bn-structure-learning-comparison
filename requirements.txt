@@ -1,0 +1,4 @@
+pgmpy==0.1.24
+bnlearn==0.8.4
+pomegranate==1.0.3
+pyAgrum==1.11.0
