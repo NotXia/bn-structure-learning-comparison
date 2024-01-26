@@ -1,28 +1,15 @@
-from abc import ABC
-from enum import Enum
+from bn_builder import Library, MultiLibBayesianNetwork
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 from sklearn.preprocessing import KBinsDiscretizer
-from pgmpy.inference import VariableElimination
-import bnlearn
-import torch
-import pyAgrum
 import networkx as nx
 import matplotlib.pyplot as plt
 
 
 
-class Library(Enum):
-    PGMPY = 0
-    BNLEARN = 1
-    POMEGRANATE = 2
-    PYAGRUM = 3
-
-
-
-class Dataset(ABC):
+class Dataset:
     def __init__(self, 
             df:pd.DataFrame, 
             features:list[str], 
@@ -37,35 +24,15 @@ class Dataset(ABC):
         self.plot_positioning = plot_positioning
 
 
-    def evaluate(self, model, library:Library) -> float:
+    def evaluateBN(self, model:MultiLibBayesianNetwork) -> float:
         """
             Computes the accuracy of a Bayesian network.
         """
-        preds = np.zeros(len(self.test_df))
-
-        if library == Library.POMEGRANATE:
-            test_data = self.test_df.to_numpy()
-            X = torch.tensor(test_data)
-            mask = torch.tensor([[col in self.features for col in self.test_df.columns]]*test_data.shape[0])
-            X_masked = torch.masked.MaskedTensor(X, mask=mask)
-
-            preds = model.predict(X_masked)[:, self.test_df.columns.tolist().index(self.target)].numpy()
-        else:
-            for i, entry in enumerate(self.test_df.iloc):
-                evidence = { f: int(entry[f]) for f in self.features }
-
-                if library == Library.PGMPY:
-                    phi = VariableElimination(model).query([self.target], evidence)
-                    preds[i] = phi.state_names[self.target][np.argmax(phi.values)]
-                elif library == Library.BNLEARN:
-                    phi = bnlearn.inference.fit(model, variables=[self.target], evidence=evidence, verbose=0)
-                    preds[i] = phi.state_names[self.target][np.argmax(phi.values)]
-                elif library == Library.PYAGRUM:
-                    preds[i] = np.argmax(pyAgrum.getPosterior(model, evs=evidence, target=self.target).tolist())
-
-
+        preds = model.predict(self.test_df, self.features, self.target)
         return accuracy_score(self.test_df[self.target], preds)
-
+    
+    def evaluate(self, model, library:Library) -> float:
+        return self.evaluateBN(MultiLibBayesianNetwork(library, model))
 
     def plot(self, model, library: Library):
         if library == Library.PGMPY:
@@ -110,7 +77,6 @@ class AppleQualityDataset(Dataset):
             seed = seed
         )
 
-
     def __loadDataset(self, data_path:str, n_bins) -> pd.DataFrame:
         df = pd.read_csv(data_path)
 
@@ -122,6 +88,73 @@ class AppleQualityDataset(Dataset):
 
         for col in ["size", "weight", "sweetness", "crunchiness", "juiciness", "ripeness", "acidity"]:
             kbins = KBinsDiscretizer(n_bins=n_bins, encode="ordinal")
+            discrete_enc = kbins.fit_transform(df[col].to_numpy().reshape(-1, 1))
+            df[col] = [encode[0] for encode in discrete_enc]
+            df[col] = df[col].astype(np.int64)
+
+        return df
+    
+
+
+# https://www.kaggle.com/datasets/ineubytes/heart-disease-dataset
+class HeartDiseaseDataset(Dataset):
+    def __init__(self, data_path:str="./data/hearth.csv", train_ratio:float=0.75, seed:int=42):
+        df = self.__loadDataset(data_path)
+        super().__init__(
+            df = df, 
+            features = df.columns[:-1],
+            target = df.columns[-1],
+            plot_positioning = {
+                "target": (1.5, 1.5),
+                "age": (0, 0.2),
+                "sex": (1, 0),
+                "cp": (2, 0),
+                "trestbps": (3, 0.2),
+                "chol": (0, 1),
+                "fbs": (1, 1),
+                "restecg": (2, 1),
+                "thalach": (2.8, 2),
+                "exang": (0.2, 2),
+                "oldpeak": (1, 2.5),
+                "slope": (2, 2.5),
+                "thal": (0.5, 3),
+                "ca": (2.5, 3),
+            },
+            train_ratio = train_ratio, 
+            seed = seed
+        )
+
+    def __loadDataset(self, data_path:str) -> pd.DataFrame:
+        df = pd.read_csv(data_path)
+
+        for col, n_bins in [("age", 5), ("trestbps", 3), ("chol", 3), ("thalach", 3), ("oldpeak", 3)]:
+            kbins = KBinsDiscretizer(n_bins=n_bins, encode="ordinal")
+            discrete_enc = kbins.fit_transform(df[col].to_numpy().reshape(-1, 1))
+            df[col] = [encode[0] for encode in discrete_enc]
+            df[col] = df[col].astype(np.int64)
+
+        return df
+    
+
+
+class RandomDataset(Dataset):
+    def __init__(self, num_variables, train_ratio:float=0.75, seed:int=42):
+        df = self.__loadDataset(num_variables, seed)
+        super().__init__(
+            df = df, 
+            features = df.columns[:-1],
+            target = df.columns[-1],
+            plot_positioning = {},
+            train_ratio = train_ratio, 
+            seed = seed
+        )
+
+    def __loadDataset(self, num_variables:int, seed) -> pd.DataFrame:
+        data = np.random.default_rng(seed).normal(size=(10000, num_variables))
+        df = pd.DataFrame(data=data, columns=[f"col{i}" for i in range(num_variables)])
+
+        for col in df.columns:
+            kbins = KBinsDiscretizer(n_bins=5, encode="ordinal")
             discrete_enc = kbins.fit_transform(df[col].to_numpy().reshape(-1, 1))
             df[col] = [encode[0] for encode in discrete_enc]
             df[col] = df[col].astype(np.int64)
