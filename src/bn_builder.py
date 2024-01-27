@@ -27,15 +27,15 @@ class Category(StrEnum):
 
 class Algorithm(StrEnum):
     PC = "PC"
-    ASTAR = "A-star"
+    ASTAR = "A*"
     MIIC = "MIIC"
-    HC = "Hill-climbing"
-    MMHC = "Max-min hill-climbing"
-    TABU = "Tabu search"
+    HC = "HC"
+    MMHC = "MMHC"
+    TABU = "TS"
     K2 = "K2"
-    CL = "Chow-Liu"
-    NB = "Naive Bayes"
-    TAN = "Tree-augmented naive Bayes"
+    CL = "CL"
+    NB = "NB"
+    TAN = "TAN"
 
 
 def _createPgmpyBNFromDag(dag: pgmpy.base.DAG, train_df) -> pgmpy.models.BayesianNetwork:
