@@ -2,7 +2,7 @@ from bn_builder import Library, MultiLibBayesianNetwork
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 from sklearn.preprocessing import KBinsDiscretizer
 import networkx as nx
 import matplotlib.pyplot as plt
@@ -26,10 +26,15 @@ class Dataset:
 
     def evaluateBN(self, model:MultiLibBayesianNetwork) -> float:
         """
-            Computes the accuracy of a Bayesian network.
+            Computes some evaluation metrics of a Bayesian network.
         """
         preds = model.predict(self.test_df, self.features, self.target)
-        return accuracy_score(self.test_df[self.target], preds)
+        return {
+            "accuracy": accuracy_score(self.test_df[self.target], preds),
+            "precision_macro": precision_score(self.test_df[self.target], preds, average="macro"),
+            "accuracy_macro": recall_score(self.test_df[self.target], preds, average="macro"),
+            "f1_macro": f1_score(self.test_df[self.target], preds, average="macro")
+        }
     
     def evaluate(self, model, library:Library) -> float:
         return self.evaluateBN(MultiLibBayesianNetwork(library, model))
