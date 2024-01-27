@@ -46,7 +46,7 @@ def _createPgmpyBNFromDag(dag: pgmpy.base.DAG, train_df) -> pgmpy.models.Bayesia
 
 
 def _pgmpyPC(train_df, ci_test, significance_level, max_cond_vars):
-    dag = pgmpy.estimators.PC(data=train_df).estimate(variant="stable", ci_test=ci_test, significance_level=significance_level, max_cond_vars=max_cond_vars, show_progress=False)
+    dag = pgmpy.estimators.PC(data=train_df).estimate(variant="parallel", ci_test=ci_test, significance_level=significance_level, max_cond_vars=max_cond_vars, show_progress=False)
     return _createPgmpyBNFromDag(dag, train_df)
 
 def _pgmpyHC(train_df, scoring_method):
