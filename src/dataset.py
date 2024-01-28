@@ -32,7 +32,7 @@ class Dataset:
         return {
             "accuracy": accuracy_score(self.test_df[self.target], preds),
             "precision_macro": precision_score(self.test_df[self.target], preds, average="macro"),
-            "accuracy_macro": recall_score(self.test_df[self.target], preds, average="macro"),
+            "recall_macro": recall_score(self.test_df[self.target], preds, average="macro"),
             "f1_macro": f1_score(self.test_df[self.target], preds, average="macro")
         }
     

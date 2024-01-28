@@ -23,6 +23,7 @@ class Category(StrEnum):
     CONSTRAINT = "constraint"
     SCORE = "score"
     TREE = "tree"
+    HYBRID = "hybrid"
 
 
 class Algorithm(StrEnum):
