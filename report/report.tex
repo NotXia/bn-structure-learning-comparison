@@ -77,7 +77,7 @@ Briefly provide whatever background information on the domain you think is neces
 % In this mini-project, we aim to review and evaluate the structure learning algorithms available 
 % in the existing open-source Python libraries for Bayesian networks.
 In this mini-project, we aim to review existing open-source Python libraries that implement structure learning algorithms
-and compare them on classification problems.
+and evaluate them on classification problems.
 
 \explanation{
 Explain the purpose of your project: what do you intend to observe/try/experience/\dots? \\
@@ -91,15 +91,16 @@ Explain the purpose of your project: what do you intend to observe/try/experienc
 
 
 \subsection{Method}
-We evaluate the available structure learning algorithms on the task of classification.
-For training and testing, we use the following datasets where continuous features have been discretized:
+% We evaluate the available structure learning algorithms on the task of classification.
+To train and test the available structure learning algorithms, 
+we use the following datasets where continuous features have been discretized:
 \begin{itemize}
     \item \textit{Apple quality}, with 7 Gaussian distributed features.
     \item \textit{Heart diseases}, with 13 features, mostly categorical.
 \end{itemize}
 
 The libraries we experimented with are listed in \Cref{tab:libraries}.
-Other libraries (\texttt{PyOpenPNL}, \texttt{pyBN}, \texttt{libpgm}) have been considered but 
+Other libraries (\texttt{PyOpenPNL}, \texttt{pyBN}, \texttt{libpgm})
 have been discarded as they are outdated and not actively maintained.
 
 \begin{table}[h]
@@ -149,9 +150,8 @@ As we are interested in testing structure learning algorithms,
 we infer the topology of the networks using these methods and, 
 for a more straightforward and fair comparison, we always use MLE as parameter learning algorithm and
 make queries only using exact inference through variable elimination.
-
 The algorithms available in each library we experimented with are listed in \Cref{tab:libraries_algos}.
-When allowed, we tested different fitness functions and independence tests.
+When allowed, we tried different fitness functions and independence tests.
 
 \begin{table*}[ht]
     \small
@@ -231,8 +231,8 @@ Each dataset has been split into a train and test set.
 The train set is fed to the structure learning algorithms to determine the topology of the network.
 The test set is used to evaluate the resulting models by querying the target variable given as evidence the other features.
 
-For each structure learning algorithm, we keep track of 
-the time required to learn the structure and the total number of edges in the computed model.
+For each structure learning algorithm, we keep track of the classification metrics,
+the time required to learn the structure, and the total number of edges in the computed model.
 
 \explanation{
 Briefly describe the probability queries or other experiments that you have carried out. Describe how you plan to evaluate the results (for example: are there results that you would expect?)
@@ -241,10 +241,10 @@ Briefly describe the probability queries or other experiments that you have carr
 \subsection{Results}
 
 Results on the \textit{apple quality} dataset are shown in \Cref{img:apple}.
-The highest accuracy has been achieved by two score-based algorithms: hill-climbing and tabu search,
-while tree-based methods are those that obtained the lowest accuracy.
+The highest accuracy is achieved by two score-based algorithms: hill-climbing and tabu search
+while tree-based methods are those that obtain the lowest accuracy.
 On the other hand, analyzing the complexity of the learned network, intended as the number of edges,
-we can observe that tree-based methods, as expected, produced simpler topologies, while A* and hill-climbing resulted in bigger models.
+we can observe that tree-based methods, as expected, produce simpler topologies, while A* and hill-climbing result in bigger models.
 
 \begin{figure}[h]
     \centering
@@ -253,11 +253,11 @@ we can observe that tree-based methods, as expected, produced simpler topologies
     \label{img:apple}
 \end{figure}
 
-Results\footnote{A* and MMHC are omitted as computationally too expensive.} 
+Results\footnote{A* and MMHC have been omitted as they are computationally too expensive.} 
 on the \textit{heart diseases} dataset are presented in \Cref{img:heart}.
-In this case, the PC algorithm reached the highest accuracy, while, again, tree-based methods have the lowest performance.
+In this case, the PC algorithm reaches the highest accuracy while, again, tree-based methods obtain the lowest performance.
 Hill-climbing is still one of the best-performing methods but 
-it is also among the algorithms that resulted in the most complex topology.
+it is also among the algorithms that result in the most complex topology.
 
 \begin{figure}[h]
     \centering
@@ -266,7 +266,7 @@ it is also among the algorithms that resulted in the most complex topology.
     \label{img:heart}
 \end{figure}
 
-Overall\footnote{For more details regarding our experiment, we refer the reader to the \texttt{plots.ipynb} notebook.}, 
+Overall\footnote{For more details regarding our experiments, we refer the reader to the \texttt{plots.ipynb} notebook.}, 
 we can empirically observe that hill-climbing is the most consistent algorithm
 across the two datasets but lacks the capability of creating a simpler topology.
 Tree-based methods are instead those with the lowest, but still acceptable, results and 
@@ -274,7 +274,7 @@ have the advantage of learning smaller and more interpretable networks.
 
 Compared to the literature, our results are in line with what is observed in \cite{learning_comparison_2021}.
 In fact, the performances of the various structure learning algorithms depend on the data and 
-it is not possible to designate one as the best one.
+it is not possible to select one as the best.
 
 
 
@@ -290,10 +290,11 @@ Anything surprising or worthwhile mentioning?
 
 In this mini-project, we explored the structure learning algorithms available in four Python libraries.
 We evaluated these algorithms on two classification datasets and 
-empirically observed that it is not reasonable to label one of them as the best one.
+empirically observed that it is not reasonable to label one of them as the best as it heavily depends on the data.
 From a more general point of view, we concluded that tree-based methods produce less accurate but simpler networks
-while constraint-based and score-based methods are more accurate but result in more complex topologies.
-
+while constraint-based and score-based methods have higher accuracy but result in more complex topologies.
+An interesting experiment we did not cover is to assess the capability of structure learning algorithms to recreate
+a network given the data sampled from a known topology.
 
 \explanation{
 Just one paragraph: what you have learned, anything interesting that came up, what are the limitations of your model/experiments/study/...
