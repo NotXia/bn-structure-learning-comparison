@@ -5,7 +5,7 @@ An evaluation of structure learning algorithms available in open-source Python l
 
 ## Installation
 The experiments were done using Python `3.11.0`.
-To install the libraries, move into `src` and run:
+To install the libraries, run:
 ```
 pip install -r requirements.txt
 ```
