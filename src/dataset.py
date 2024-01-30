@@ -1,3 +1,6 @@
+"""
+    Dataset handler.
+"""
 from bn_builder import Library, MultiLibBayesianNetwork
 import numpy as np
 import pandas as pd

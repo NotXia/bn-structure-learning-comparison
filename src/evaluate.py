@@ -1,3 +1,6 @@
+"""
+    Runs the evaluation on a given dataset.
+"""
 import os
 import argparse
 from dataset import Dataset, AppleQualityDataset, HeartDiseaseDataset, RandomDataset
