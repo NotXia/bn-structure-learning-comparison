@@ -43,7 +43,7 @@ tiancheng.xia@studio.unibo.it
 \begin{abstract}
 \begin{quote}
 
-This mini-project aims to explore and test different structure learning algorithms available
+This mini-project aims to explore and test the different structure learning algorithms available
 in the existing open-source libraries for Bayesian networks.
 We reviewed the available Python libraries and 
 experimented with the algorithms available in four of them, evaluating the methods on classification tasks.
@@ -96,7 +96,7 @@ To train and test the available structure learning algorithms,
 we use the following datasets where continuous features have been discretized:
 \begin{itemize}
     \item \textit{Apple quality}, with 7 Gaussian distributed features.
-    \item \textit{Heart diseases}, with 13 features, mostly categorical.
+    \item \textit{Heart disease}, with 13 features, mostly categorical.
 \end{itemize}
 
 The libraries we experimented with are listed in \Cref{tab:libraries}.
@@ -254,7 +254,7 @@ we can observe that tree-based methods, as expected, produce simpler topologies,
 \end{figure}
 
 Results\footnote{A* and MMHC have been omitted as they are computationally too expensive.} 
-on the \textit{heart diseases} dataset are presented in \Cref{img:heart}.
+on the \textit{heart disease} dataset are presented in \Cref{img:heart}.
 In this case, the PC algorithm reaches the highest accuracy while, again, tree-based methods obtain the lowest performance.
 Hill-climbing is still one of the best-performing methods but 
 it is also among the algorithms that result in the most complex topology.
@@ -262,7 +262,7 @@ it is also among the algorithms that result in the most complex topology.
 \begin{figure}[h]
     \centering
     \includegraphics[width=\linewidth]{img/heart_acc_edges.pdf}
-    \caption{Relationship between accuracy and number of edges on the \textit{heart diseases} dataset.}
+    \caption{Relationship between accuracy and number of edges on the \textit{heart disease} dataset.}
     \label{img:heart}
 \end{figure}
 
@@ -305,7 +305,7 @@ Just one paragraph: what you have learned, anything interesting that came up, wh
 
 \begin{itemize}
     \item \textit{Apple quality} dataset: {\small\url{https://www.kaggle.com/datasets/nelgiriyewithana/apple-quality}}.
-    \item \textit{Heart diseases} dataset: {\small\url{https://www.kaggle.com/datasets/ineubytes/heart-disease-dataset}}.
+    \item \textit{Heart disease} dataset: {\small\url{https://www.kaggle.com/datasets/ineubytes/heart-disease-dataset}}.
 \end{itemize}
 
 \explanation{
