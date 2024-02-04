@@ -237,14 +237,14 @@
       "TAN": [
          {
             "metrics": {
-               "accuracy": 0.7704280155642024,
-               "precision_macro": 0.7715083120980464,
-               "recall_macro": 0.7712121212121212,
-               "f1_macro": 0.7704141115905823
+               "accuracy": 0.8249027237354085,
+               "precision_macro": 0.8277006454755815,
+               "recall_macro": 0.8261515151515151,
+               "f1_macro": 0.8248072349385727
             },
             "num_edges": 25,
             "library": "pgmpy",
-            "time": 83467795.0,
+            "time": 57534480.666666664,
             "notes": null
          }
       ]

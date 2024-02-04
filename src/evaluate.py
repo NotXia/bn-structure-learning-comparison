@@ -58,7 +58,7 @@ def evaluate(data:Dataset, compute_metrics:bool, measure_time:bool) -> dict:
         (Library.PGMPY, Category.HYBRID, Algorithm.MMHC, "AIC", {"scoring_method": "aicscore"}),
         (Library.PGMPY, Category.TREE, Algorithm.CL, None, {}),
         (Library.PGMPY, Category.TREE, Algorithm.NB, None, {}),
-        (Library.PGMPY, Category.TREE, Algorithm.TAN, None, {"class_node": data.features[0]}),
+        (Library.PGMPY, Category.TREE, Algorithm.TAN, None, {}),
         (Library.POMEGRANATE, Category.CONSTRAINT, Algorithm.ASTAR, None, {}),
         (Library.POMEGRANATE, Category.TREE, Algorithm.CL, None, {}),
         (Library.PYAGRUM, Category.CONSTRAINT, Algorithm.MIIC, "MDL correction", {"correction": "MDL"}),

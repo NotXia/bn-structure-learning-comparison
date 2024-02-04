@@ -62,16 +62,16 @@ def _pgmpyMMHC(train_df):
     dag = pgmpy.estimators.MmhcEstimator(data=train_df).estimate()
     return _createPgmpyBNFromDag(dag, train_df)
 
-def _pgmpyCL(train_df):
-    dag = pgmpy.estimators.TreeSearch(data=train_df).estimate(estimator_type="chow-liu", show_progress=False)
+def _pgmpyCL(train_df, root_node):
+    dag = pgmpy.estimators.TreeSearch(data=train_df, root_node=root_node).estimate(estimator_type="chow-liu", show_progress=False)
     return _createPgmpyBNFromDag(dag, train_df)
 
 def _pgmpyNB(train_df, features, target):
     dag = pgmpy.models.NaiveBayes(features, target)
     return _createPgmpyBNFromDag(dag, train_df)
 
-def _pgmpyTAN(train_df, class_node):
-    dag = pgmpy.estimators.TreeSearch(data=train_df).estimate(estimator_type="tan", class_node=class_node, show_progress=False)
+def _pgmpyTAN(train_df, root_node):
+    dag = pgmpy.estimators.TreeSearch(data=train_df, root_node=train_df.columns[0]).estimate(estimator_type="tan", class_node=root_node, show_progress=False)
     return _createPgmpyBNFromDag(dag, train_df)
 
 def _bnlearnPC(train_df):
@@ -82,16 +82,16 @@ def _bnlearnHC(train_df, scoretype):
     dag = bnlearn.structure_learning.fit(train_df, methodtype="hc", scoretype=scoretype, verbose=0)
     return bnlearn.parameter_learning.fit(dag, train_df, methodtype="ml", verbose=0)
 
-def _bnlearnCL(train_df):
-    dag = bnlearn.structure_learning.fit(train_df, methodtype="cl", verbose=0)
+def _bnlearnCL(train_df, root_node):
+    dag = bnlearn.structure_learning.fit(train_df, methodtype="cl", verbose=0, root_node=root_node)
     return bnlearn.parameter_learning.fit(dag, train_df, methodtype="ml", verbose=0)
 
 def _bnlearnNB(train_df, root_node):
     dag = bnlearn.structure_learning.fit(train_df, methodtype="naivebayes", root_node=root_node, verbose=0)
     return bnlearn.parameter_learning.fit(dag, train_df, methodtype="ml", verbose=0)
 
-def _bnlearnTAN(train_df, class_node):
-    dag = bnlearn.structure_learning.fit(train_df, methodtype="tan", class_node=class_node, verbose=0)
+def _bnlearnTAN(train_df, root_node):
+    dag = bnlearn.structure_learning.fit(train_df, methodtype="tan", root_node=train_df.columns[0], class_node=root_node, verbose=0)
     return bnlearn.parameter_learning.fit(dag, train_df, methodtype="ml", verbose=0)
 
 def _pomegranateAstar(train_df):
@@ -141,15 +141,15 @@ class MultiLibBayesianNetwork:
             if algorithm == Algorithm.PC:           self.model = _pgmpyPC(data.train_df, **kwargs)
             elif algorithm == Algorithm.HC:         self.model = _pgmpyHC(data.train_df, **kwargs)
             elif algorithm == Algorithm.MMHC:       self.model = _pgmpyMMHC(data.train_df)
-            elif algorithm == Algorithm.CL:         self.model = _pgmpyCL(data.train_df)
+            elif algorithm == Algorithm.CL:         self.model = _pgmpyCL(data.train_df, root_node=data.target)
             elif algorithm == Algorithm.NB:         self.model = _pgmpyNB(data.train_df, data.features, data.target)
-            elif algorithm == Algorithm.TAN:        self.model = _pgmpyTAN(data.train_df, **kwargs)
+            elif algorithm == Algorithm.TAN:        self.model = _pgmpyTAN(data.train_df, root_node=data.target)
         elif self.library == Library.BNLEARN:
             if algorithm == Algorithm.PC:           self.model = _bnlearnPC(data.train_df)
             elif algorithm == Algorithm.HC:         self.model = _bnlearnHC(data.train_df, **kwargs)
-            elif algorithm == Algorithm.CL:         self.model = _bnlearnCL(data.train_df)
+            elif algorithm == Algorithm.CL:         self.model = _bnlearnCL(data.train_df, root_node=data.target)
             elif algorithm == Algorithm.NB:         self.model = _bnlearnNB(data.train_df, data.target)
-            elif algorithm == Algorithm.TAN:        self.model = _bnlearnTAN(data.train_df, **kwargs)
+            elif algorithm == Algorithm.TAN:        self.model = _bnlearnTAN(data.train_df, root_node=data.target)
         elif self.library == Library.POMEGRANATE:
             if algorithm == Algorithm.ASTAR:        self.model = _pomegranateAstar(data.train_df)
             elif algorithm == Algorithm.CL:         self.model = _pomegranateCL(data.train_df)
