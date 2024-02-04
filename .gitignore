@@ -169,3 +169,13 @@ report/*.fdb_latexmk
 report/*.fls
 report/*.out
 report/*.synctex.gz
+slides/*.aux
+slides/*.bbl
+slides/*.blg
+slides/*.fdb_latexmk
+slides/*.fls
+slides/*.out
+slides/*.synctex.gz
+slides/*.nav
+slides/*.snm
+slides/*.toc
