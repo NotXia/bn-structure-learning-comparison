@@ -48,7 +48,7 @@ class Dataset:
             plt.title("pgmpy")
         elif library == Library.BNLEARN:
             nx.draw(nx.DiGraph(model["model_edges"]), pos=self.plot_positioning, with_labels=True)
-            plt.title("pgmpy")
+            plt.title("bnlearn")
         elif library == Library.POMEGRANATE:
             edges = [(
                 self.train_df.columns[ model._distribution_mapping[edge[0]] ], 
@@ -106,7 +106,7 @@ class AppleQualityDataset(Dataset):
 
 # https://www.kaggle.com/datasets/ineubytes/heart-disease-dataset
 class HeartDiseaseDataset(Dataset):
-    def __init__(self, data_path:str="./data/hearth.csv", train_ratio:float=0.75, seed:int=42):
+    def __init__(self, data_path:str="./data/heart.csv", train_ratio:float=0.75, seed:int=42):
         df = self.__loadDataset(data_path)
         super().__init__(
             df = df, 
