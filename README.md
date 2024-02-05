@@ -1,6 +1,8 @@
-# Evaluation of Python libraries for Bayesian networks
+# Evaluation of structure learning algorithms for Bayesian networks
 
-An evaluation of structure learning algorithms available in open-source Python libraries.
+Project for the Fundamentals of Artificial Intelligence and Knowledge Representation (Module 3) course at the University of Bologna (A.Y. 2023-2024).
+
+A comparison of structure learning algorithms available in open-source Python libraries.
 
 
 ## Installation
